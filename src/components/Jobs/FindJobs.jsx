@@ -7,6 +7,8 @@ export default function FindJobs() {
 
   const [jobsData, setJobsData] = useState([]);
 
+  let controller = new AbortController();
+
   return(
     <div className='grid grid-rows-12'>
 
@@ -15,7 +17,7 @@ export default function FindJobs() {
       </div>
 
       <div className="row-start-4">
-        <Form setJobsData={setJobsData}/>
+        <Form setJobsData={setJobsData} controller={controller}/>
       </div>
 
       <div className="row-start-7">
@@ -44,11 +46,14 @@ function _headline() {
 }
 
 function _displayJobs(jobsData) {
+
+  console.log(jobsData)
+
   return (
     <div className='flex flex-wrap mx-10 justify-center'>
-      { jobsData.map(job => {
+      { jobsData.map((job, index) => {
         return (
-          <div className='mx-3'>
+          <div key={index} className='mx-3'>
             <JobCard job={job}/>
           </div>
         )
