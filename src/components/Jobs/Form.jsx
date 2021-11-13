@@ -10,12 +10,12 @@ export default function Form(props) {
   const [jobType, setJobType] = useState("");
   const [jobLocation, setJobLocation] = useState("");
 
-  const [onGoingRequest, setOnGoingRequest] = useState(false);
   const [fetchController, setFetchController] = useState(null);
 
   const {
     setJobsData,
-    // controller,
+    onGoingRequest,
+    setOnGoingRequest,
   } = {...props}
 
 
@@ -162,7 +162,7 @@ function _submitButton(onFormSubmit, onGoingRequest) {
       {
         onGoingRequest ? 
           <div className="flex justify-between items-center">           
-            <Spinner style="border-4 border-white-200 h-6 w-6 mr-2"/> 
+            <Spinner style="border-4 h-6 w-6 mr-2"/> 
             Cancel
           </div>
         :

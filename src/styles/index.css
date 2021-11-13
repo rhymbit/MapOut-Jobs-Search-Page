@@ -12,6 +12,7 @@
 
 
 body {
+  height: 100vh;
   background: linear-gradient(to bottom, var(--orange5), var(--orange0));
   background-repeat: no-repeat;
   margin: 0;
@@ -19,6 +20,10 @@ body {
   font-family: 'Fruktur', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
 }
 
 code {
@@ -90,7 +95,7 @@ code {
   }
 }
 
-.jobs-list {
+.animate-jobs-list {
   animation: fadeIn normal 1s linear;
 }
 

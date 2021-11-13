@@ -4,26 +4,28 @@ import JobCard from '../Cards/JobCard';
 import jobsSampleData from './jobsSampleData'
 
 import { Country } from 'country-state-city';
+import Spinner from '../Spinner/Spinner';
 
 
 export default function FindJobs() {
 
   const [jobsData, setJobsData] = useState([]);
+  const [onGoingRequest, setOnGoingRequest] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setJobsData(jobsData => [...jobsData, ...jobsSampleData.jobs]);
-    }, 3000)}, [])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setJobsData(jobsData => [...jobsData, ...jobsSampleData.jobs]);
+  //   }, 3000)}, [])
 
   return(
-    <div className='grid grid-rows-12'>
+    <div className='grid grid-rows-12 h-full'>
 
       <div className="row-start-2">
         { _headline() }
       </div>
 
       <div className="row-start-4">
-        <Form setJobsData={setJobsData} />
+        <Form setJobsData={setJobsData} onGoingRequest={onGoingRequest} setOnGoingRequest={setOnGoingRequest}/>
       </div>
 
       <div className="row-start-7">
@@ -39,8 +41,16 @@ export default function FindJobs() {
           </div>
         </div>
 
-        <div className="jobs-list">
-          {_displayJobs(jobsData)}
+        <div className="row-start-10 animate-jobs-list mb-10">
+          {
+            onGoingRequest ?
+            <div className='flex justify-center items-center'>
+              <Spinner style="border-4 h-36 w-36" />
+            </div>
+            :
+              null
+          }
+        {_displayJobs(jobsData)}
         </div>
 
       </div>
@@ -66,11 +76,11 @@ function _displayJobs(jobsData) {
   console.log(jobsData)
 
   return (
-    <div className='flex flex-wrap justify-center jobs-list'>
+    <div className='flex flex-wrap justify-center'>
       { jobsData.map((job, index) => {
         
         return ( job && 
-          <div key={index} className="mx-3 jobs-list">
+          <div key={index} className="mx-3 animate-jobs-list">
             <JobCard job={job}/>
           </div>
         )
