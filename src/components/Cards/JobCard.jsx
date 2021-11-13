@@ -83,7 +83,7 @@ function _employeeIndustry(employeeCount, industry) {
       </div>
       <div className='flex justify-center text-center p-1 col-start-3 border-2 border-yellow-400 w-40 h-14 rounded-3xl'>
         {
-          industry.startsWith('Banking') ?
+          industry && industry.startsWith('Banking') ?
             `Banking / Account/ Finance`
           :
             industry

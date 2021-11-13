@@ -23,52 +23,56 @@ export default function Form(props) {
 
 
   const onFormSubmit = (e) => {
-    
     let controller = new AbortController();
     setFetchController(controller);
+    setNoJobsMessage(false);
     
-    if (!onGoingRequest) {
-    
-      setOnGoingRequest(true);
+    if (jobType !== "" && jobLocation !== "") {
 
-      try {
-        fetchJobs(controller.signal)
-          .then(res => {
-            console.log(res);
-            if (res.jobs.length === 0) {
-              setNoJobsMessage(true);
-            } else {
-              setJobsData(res.jobs);
-            }
-          })
-          .catch(err => {
-            if (err.name === 'AbortError') {
-              console.log('Request aborted');
-            } else {
-              console.log(err);
-              setErrorMessage('Error at server, please try again');
-              setNoJobsMessage(true);
-            }
-          })
-          .finally (() => {
+      if (!onGoingRequest) {
+      
+        setOnGoingRequest(true);
+
+        try {
+          fetchJobs(jobType, jobLocation, controller.signal)
+            .then(res => {
+              if (res.jobs.length === 0) {
+                setNoJobsMessage(true);
+              } else {
+                setJobsData(res.jobs);
+              }
+            })
+            .catch(err => {
+              if (err.name === 'AbortError') {
+                console.log('Request aborted');
+              } else {
+                console.log(err);
+                setErrorMessage('Error at server, please try again');
+                setNoJobsMessage(true);
+              }
+            })
+            .finally (() => {
+              setOnGoingRequest(false);
+            })
+        } catch (error) {
+            setErrorMessage('Error at server, please try again');
             setOnGoingRequest(false);
-          })
-      } catch (error) {
-          setErrorMessage('Error at server, please try again');
-          setOnGoingRequest(false);
-          setNoJobsMessage(true);
+            setNoJobsMessage(true);
+        }
+      } else {
+        fetchController.abort();
+        setOnGoingRequest(false);
       }
     } else {
-      fetchController.abort();
-      setOnGoingRequest(false);
+      setNoJobsMessage(true);
+      setErrorMessage("Please select a Location and select or type a Job");
     }
-
   }
 
   return (
     <div className='flex flex-wrap justify-evenly mt-20 text-gray-600'>
 
-      <div className='w-full flex justify-center mb-8'>
+      <div className='w-full flex flex-wrap justify-center mb-8'>
         {
           jobType.length > 0 ?
             <div className='mx-10 flex flex-col justify-center p-2 border-2  border-yellow-700 rounded-full border-opacity-50'>

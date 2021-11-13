@@ -73,8 +73,6 @@ function _headline() {
 
 function _displayJobs(jobsData) {
 
-  console.log(jobsData)
-
   return (
     <div className='flex flex-wrap justify-center'>
       { jobsData.map((job, index) => {

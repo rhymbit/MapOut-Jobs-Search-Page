@@ -7,7 +7,7 @@ const environment = getEnvironment()
 
 const config = {
   development: {
-    'apiBaseUrl': 'https://staging.mapout.com/mapout-node/joblist/internshala-jobs?',
+    'apiBaseUrl': 'https://staging.mapout.com/mapout-node/joblist/monster-jobs?',
     'countryApiUrl': 'https://api.countrystatecity.in/v1/countries/IN',
   },
   production: {
