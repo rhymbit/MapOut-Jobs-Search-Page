@@ -121,7 +121,7 @@ function _jobTypeSelect(setJobType) {
 function _jobLocationSelect(setJobLocation) {
   return (
     <select 
-    id="jobLocation"
+      id="jobLocation"
       name="jobLocation" 
       onChange={e => setJobLocation(e.target.value)}
       className="select-box"
@@ -141,11 +141,19 @@ function _jobLocationSelect(setJobLocation) {
 }
 
 function _submitButton(onFormSubmit, onGoingRequest) {
+
+  let buttonStyle;
+
+  onGoingRequest ?
+    buttonStyle = `bg-red-500 hover:bg-red-400`
+  :
+    buttonStyle = `bg-yellow-600 hover:bg-yellow-500`
+
   return (
     <button
       id="jobSearchButton"
       type="submit"
-      className="search-button bg-yellow-600 hover:bg-yellow-500 "
+      className={`search-button ${buttonStyle}`}
       onClick={(e) => {
         e.preventDefault();
         onFormSubmit(e);
@@ -153,36 +161,16 @@ function _submitButton(onFormSubmit, onGoingRequest) {
     >
       {
         onGoingRequest ? 
-          <div className="flex justify-between items-center">
-            {_toggleSubmitButtonColor(onGoingRequest)}
-            <Spinner style="border-4 border-white-200 h-6 w-6 mr-2"/> Cancel
+          <div className="flex justify-between items-center">           
+            <Spinner style="border-4 border-white-200 h-6 w-6 mr-2"/> 
+            Cancel
           </div>
         :
           <div>
-            {_toggleSubmitButtonColor(onGoingRequest)}
             Search
           </div> 
       }
 
     </button>
   )
-}
-
-function _toggleSubmitButtonColor(onGoingRequest) {
-
-  let button = document.getElementById("jobSearchButton");
-
-  if (button){
-    if (onGoingRequest) {
-      button.classList.remove("bg-yellow-600");
-      button.classList.remove("hover:bg-yellow-500");
-      button.classList.add("bg-red-500");
-      button.classList.add("hover:bg-red-400");
-    } else {
-      button.classList.remove("bg-red-500");
-      button.classList.remove("hover:bg-red-400");
-      button.classList.add("bg-yellow-600");
-      button.classList.add("hover:bg-yellow-500");
-    }
-  }
 }
