@@ -11,27 +11,22 @@ export default function Form(props) {
   const [jobLocation, setJobLocation] = useState("");
 
   const [onGoingRequest, setOnGoingRequest] = useState(false);
-  const [aborted, setAborted] = useState(false);
+  const [fetchController, setFetchController] = useState(null);
 
   const {
     setJobsData,
     // controller,
   } = {...props}
 
-  
 
   const onFormSubmit = (e) => {
     
     let controller = new AbortController();
-
-    console.log(controller.signal);
+    setFetchController(controller);
     
     if (!onGoingRequest) {
-      
-      setAborted(false);
+    
       setOnGoingRequest(true);
-
-      console.log(jobType, jobLocation);
 
       try {
         fetchJobs(jobType, jobLocation, controller.signal)
@@ -39,21 +34,22 @@ export default function Form(props) {
             setJobsData(res.jobs);
             setOnGoingRequest(false);
           })
+          .catch(err => {
+            if (err.name === 'AbortError') {
+              console.log('Request aborted');
+            } else {
+              console.log(err);
+            }
+          })
       } catch (error) {
           setOnGoingRequest(false);
           // console.log(error)
       }
     } else {
-      controller.abort();
-      setAborted(true);
+      fetchController.abort();
       setOnGoingRequest(false);
     }
 
-  }
-
-  const onCancel = () => {
-    controller.abort();
-    console.log(signal)
   }
 
   return (
@@ -77,17 +73,15 @@ export default function Form(props) {
 
       { _jobTypeSelect(setJobType)}
       { _jobLocationSelect(setJobLocation)}
-      {_submitButton(onFormSubmit, onCancel, onGoingRequest)}
+      {_submitButton(onFormSubmit, onGoingRequest)}
     </div>
   );
 }
 
 function _jobTypeInput(setJobType) {
-
   const onChange = (e) => {
     setJobType(e.target.value);
   }
-
   return (
     <input
       onChange={e => onChange(e)}
@@ -143,7 +137,7 @@ function _jobLocationSelect(setJobLocation) {
   )
 }
 
-function _submitButton(onFormSubmit, onCancel, onGoingRequest) {
+function _submitButton(onFormSubmit, onGoingRequest) {
   return (
     <button
       id="jobSearchButton"
