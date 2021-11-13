@@ -17,7 +17,7 @@ import './styles/App.css'
 
 function App() {
   return (
-    <div>
+    <div className="h-screen">
       <FindJobs />
     </div>
   )

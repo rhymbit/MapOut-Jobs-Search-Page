@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Form from './Form';
 import JobCard from '../Cards/JobCard';
@@ -21,12 +22,22 @@ export default function FindJobs() {
       </div>
 
       <div className="row-start-7">
-        {
-          jobsData.length > 0 ?
-            _displayJobs(jobsData)
-          :
-            null
-        }
+
+        <div className='flex justify-center mt-14'>
+          <div className='text-2xl text-gray-700'>
+            {
+              jobsData.length > 0 ?
+                `Total Jobs: ${jobsData.length}`
+              :
+                null
+            }
+          </div>
+        </div>
+
+        <div className="jobs-list">
+          {_displayJobs(jobsData)}
+        </div>
+
       </div>
 
     </div>
@@ -36,8 +47,8 @@ export default function FindJobs() {
 
 function _headline() {
   return (
-    <div className="mt-10 grid grid-cols-8">
-      <div className='col-start-3 col-span-4 text-3xl text-center justify-center'>
+    <div className='mt-10 flex justify-center'>
+      <div className='text-3xl text-center max-w-md'>
         Please <b className='mx-1'>choose</b> a bubble or type
         your position or field of interest
       </div>
@@ -50,10 +61,10 @@ function _displayJobs(jobsData) {
   console.log(jobsData)
 
   return (
-    <div className='flex flex-wrap mx-10 justify-center'>
+    <div className='flex flex-wrap justify-center jobs-list'>
       { jobsData.map((job, index) => {
         return (
-          <div key={index} className='mx-3'>
+          <div key={index} className="mx-3 jobs-list">
             <JobCard job={job}/>
           </div>
         )

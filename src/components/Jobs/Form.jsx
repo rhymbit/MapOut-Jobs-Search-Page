@@ -33,7 +33,7 @@ export default function Form(props) {
       try {
         fetchJobs(jobType, jobLocation, controller.signal)
           .then(res => {
-            aborted ? null : setJobsData(res);
+            setJobsData(res.jobs);
             setOnGoingRequest(false);
           })
       } catch (error) {
@@ -54,16 +54,48 @@ export default function Form(props) {
   }
 
   return (
-    <div className='flex flex-wrap justify-evenly mt-14'>
-        { _jobTypeInput(setJobType)}
-        { _jobLocationInput(setJobLocation)}
-        {_submitButton(onFormSubmit, onCancel, onGoingRequest)}
+    <div className='flex flex-wrap justify-evenly mt-20 text-gray-600'>
+
+      <div className='w-full flex justify-center mb-8'>
+
+        {
+          jobType.length > 0 ?
+            <div className='mx-10 flex flex-col justify-center p-2 border-2  border-yellow-700 rounded-full border-opacity-50'>
+              {jobType}
+            </div>
+          :
+            null
+        }
+
+        <div>
+          {_jobTypeInput(setJobType)}
+        </div>
+      </div>
+
+      { _jobTypeSelect(setJobType)}
+      { _jobLocationSelect(setJobLocation)}
+      {_submitButton(onFormSubmit, onCancel, onGoingRequest)}
     </div>
   );
 }
 
-
 function _jobTypeInput(setJobType) {
+
+  const onChange = (e) => {
+    setJobType(e.target.value);
+  }
+
+  return (
+    <input
+      onChange={e => onChange(e)}
+      placeholder="Type a job or select one from the list"
+      className='w-80 bg-transparent border-b-2 border-gray-400 rounded-lg p-2 outline-none'
+    ></input>
+  )
+}
+
+
+function _jobTypeSelect(setJobType) {
   return(
     <select 
       name="jobType" 
@@ -86,7 +118,7 @@ function _jobTypeInput(setJobType) {
 }
 
 
-function _jobLocationInput(setJobLocation) {
+function _jobLocationSelect(setJobLocation) {
   return (
     <select 
     id="jobLocation"
@@ -113,7 +145,7 @@ function _submitButton(onFormSubmit, onCancel, onGoingRequest) {
     <button
       id="jobSearchButton"
       type="submit"
-      className="p-2 w-32 bg-green-500 rounded-full font-bold text-white hover:bg-green-300"
+      className="search-button bg-yellow-600 hover:bg-yellow-500 "
       onClick={(e) => {
         e.preventDefault();
         onFormSubmit(e);
@@ -142,15 +174,15 @@ function _toggleSubmitButtonColor(onGoingRequest) {
 
   if (button){
     if (onGoingRequest) {
-      button.classList.remove("bg-green-500");
-      button.classList.remove("hover:bg-green-300");
+      button.classList.remove("bg-yellow-600");
+      button.classList.remove("hover:bg-yellow-500");
       button.classList.add("bg-red-500");
-      button.classList.add("hover:bg-red-300");
+      button.classList.add("hover:bg-red-400");
     } else {
-      button.classList.remove("bg-red-300");
-      button.classList.remove("hover:bg-red-300");
-      button.classList.add("bg-green-500");
-      button.classList.add("hover:bg-green-300");
+      button.classList.remove("bg-red-500");
+      button.classList.remove("hover:bg-red-400");
+      button.classList.add("bg-yellow-600");
+      button.classList.add("hover:bg-yellow-500");
     }
   }
 }
