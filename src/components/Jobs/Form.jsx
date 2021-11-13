@@ -4,6 +4,7 @@ import Spinner from "../Spinner/Spinner";
 import jobLocations from "./jobLocations";
 import jobTypes from "./jobTypes";
 
+
 export default function Form(props) {
 
   const [jobType, setJobType] = useState("");
@@ -17,9 +18,11 @@ export default function Form(props) {
     // controller,
   } = {...props}
 
-  let controller = new AbortController();
+  
 
   const onFormSubmit = (e) => {
+    
+    let controller = new AbortController();
 
     console.log(controller.signal);
     

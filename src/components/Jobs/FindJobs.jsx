@@ -1,14 +1,13 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from './Form';
 import JobCard from '../Cards/JobCard';
+
+import { Country } from 'country-state-city';
 
 
 export default function FindJobs() {
 
   const [jobsData, setJobsData] = useState([]);
-
-  let controller = new AbortController();
 
   return(
     <div className='grid grid-rows-12'>
@@ -18,7 +17,7 @@ export default function FindJobs() {
       </div>
 
       <div className="row-start-4">
-        <Form setJobsData={setJobsData} controller={controller}/>
+        <Form setJobsData={setJobsData} />
       </div>
 
       <div className="row-start-7">
