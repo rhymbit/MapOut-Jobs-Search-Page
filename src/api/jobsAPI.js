@@ -1,6 +1,6 @@
 import appConfig from "../../app.config"
 
-async function fetchJobs(keyword, location, signal=null) {
+async function fetchJobs(keyword=null, location=null, signal=null) {
 
   const url = `${appConfig.apiBaseUrl}keyword=${keyword}&location=${location}`;
   // const url = `https://swapi.dev/api/people/4`

@@ -12,6 +12,9 @@ export default function Form(props) {
 
   const [fetchController, setFetchController] = useState(null);
 
+  const [noJobsMessage, setNoJobsMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("No jobs available for the given input");
+
   const {
     setJobsData,
     onGoingRequest,
@@ -29,21 +32,31 @@ export default function Form(props) {
       setOnGoingRequest(true);
 
       try {
-        fetchJobs(jobType, jobLocation, controller.signal)
+        fetchJobs(controller.signal)
           .then(res => {
-            setJobsData(res.jobs);
-            setOnGoingRequest(false);
+            console.log(res);
+            if (res.jobs.length === 0) {
+              setNoJobsMessage(true);
+            } else {
+              setJobsData(res.jobs);
+            }
           })
           .catch(err => {
             if (err.name === 'AbortError') {
               console.log('Request aborted');
             } else {
               console.log(err);
+              setErrorMessage('Error at server, please try again');
+              setNoJobsMessage(true);
             }
           })
+          .finally (() => {
+            setOnGoingRequest(false);
+          })
       } catch (error) {
+          setErrorMessage('Error at server, please try again');
           setOnGoingRequest(false);
-          // console.log(error)
+          setNoJobsMessage(true);
       }
     } else {
       fetchController.abort();
@@ -66,7 +79,7 @@ export default function Form(props) {
         }
 
         <div>
-          {_jobTypeInput(setJobType)}
+          {_jobTypeInput(setJobType, onGoingRequest)}
         </div>
 
       </div>
@@ -76,20 +89,32 @@ export default function Form(props) {
         { _jobLocationSelect(setJobLocation)}
         {_submitButton(onFormSubmit, onGoingRequest)}
       </div>
+      
+      {
+        noJobsMessage ?
+          <div className='flex flex-wrap w-full justify-center mt-20 text-red-500 text-xl transition duration-400 ease-in animate-bounce'>
+            {errorMessage}
+          </div>
+        :
+          null
+      }
+      
+      {_disableInputs(onGoingRequest)}
 
     </div>
   );
 }
 
-function _jobTypeInput(setJobType) {
+function _jobTypeInput(setJobType, onGoingRequest) {
   const onChange = (e) => {
     setJobType(e.target.value);
   }
   return (
     <input
+      id="jobInputBox"
       onChange={e => onChange(e)}
       placeholder="Type a job or select one from the list"
-      className='w-80 bg-transparent border-b-2 border-gray-400 rounded-lg p-2 outline-none'
+      className="w-80 bg-transparent border-b-2 border-gray-400 rounded-lg p-2 outline-none"
     ></input>
   )
 }
@@ -98,8 +123,8 @@ function _jobTypeInput(setJobType) {
 function _jobTypeSelect(setJobType) {
   return(
     <select 
-      name="jobType" 
       id="jobType" 
+      name="jobType" 
       onChange={e => setJobType(e.target.value)}
       className="select-box"
     >
@@ -173,4 +198,24 @@ function _submitButton(onFormSubmit, onGoingRequest) {
 
     </button>
   )
+}
+
+function _disableInputs(onGoingRequest) {
+
+  let jobInputBox = document.getElementById("jobInputBox");
+  let jobType = document.getElementById("jobType");
+  let jobLocation = document.getElementById("jobLocation");
+
+  if (onGoingRequest && jobInputBox) {
+    jobInputBox.disabled = true;
+    jobType.disabled = true;
+    jobLocation.disabled = true;
+  }
+
+  if (!onGoingRequest && jobInputBox) {
+    jobInputBox.disabled = false;
+    jobType.disabled = false;
+    jobLocation.disabled = false;
+  }
+
 }
