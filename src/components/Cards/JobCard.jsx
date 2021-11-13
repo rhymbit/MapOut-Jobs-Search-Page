@@ -20,15 +20,25 @@ export default function JobCard(props) {
     location,
     experience,
     salary,
-    jobType,
+    jobtype,
     summary,
+    link,
   } = {...props.job}
 
 
   return (
     <div className="card">
 
-      <div className='text-gray-800 text-3xl font-semibold'>{title}</div>
+      <div className='text-gray-800 text-3xl font-semibold'>
+        {
+          title.length > 43 ?
+            <div className='text-xl max-h-20 overflow-y-scroll '>
+              {title}
+            </div>
+          :
+            title
+        }
+      </div>
 
       <div className='mt-5 ml-2 text-2xl text-gray-600'>{company}</div>
       
@@ -39,12 +49,22 @@ export default function JobCard(props) {
             alt='user icon'
             className='w-6 h-6 mr-2'
           />
-          { employeeCount > 10 ? 
-          `More than 1000 employees` : `${employeeCount} employees`}
+          {
+            employeeCount ? 
+              employeeCount > 10 ? 
+                `More than 1000 employees` : `${employeeCount} employees`
+            :
+              `Employee count unknown`
+          }
         </div>
 
-        <div className='flex col-start-3 border-2 border-yellow-400 w-40 h-20 rounded-3xl p-2 text-center'>
-          {industry}
+        <div className='flex justify-center text-center p-1 col-start-3 border-2 border-yellow-400 w-40 h-14 rounded-3xl'>
+          {
+            industry.startsWith('Banking') ?
+              `Banking / Account/ Finance`
+            :
+              industry
+          }
         </div>
   
       </div>
@@ -57,7 +77,17 @@ export default function JobCard(props) {
             alt='map pin icon'
             className='w-6 h-6 mr-2'
           />
-          {location}
+          <div className='w-28'>
+            {
+              location ?
+                location.length > 0 ?
+                  location
+                :
+                  `Hybrid`
+              :
+                `Job Location Unknown`
+            }
+          </div>
         </div>
         
         <div className='flex col-start-3'>
@@ -66,20 +96,32 @@ export default function JobCard(props) {
             alt='briefcase icon'
             className='w-6 h-6 mr-2'
           />
-          {experience}
+          {
+            experience ?
+              experience
+            :
+              `Experience details not provided`
+          }
         </div>
 
       </div>
 
       <div className='grid grid-cols-3 my-4 justify-between'>
                  
-        <div className='flex col-start-1'>
+        <div className='flex col-start-1 col-span-2'>
           <img
             src={dollarSignIcon}
             alt='dollar sign icon'
             className='w-6 h-6 mr-2'
           />
-          {salary}
+          <div className='w-28'>
+          {
+            salary ?
+              salary
+            :
+              `Salary not provided`
+          }
+          </div>
         </div>
         
         <div className='flex col-start-3'>
@@ -88,7 +130,7 @@ export default function JobCard(props) {
             alt='clock icon'
             className='w-6 h-6 mr-2'
           />
-          {jobType}
+          {jobtype}
         </div>
 
       </div>
@@ -104,7 +146,9 @@ export default function JobCard(props) {
 
       <div className='flex justify-between'>
 
-        <div className="text-gray-400">Apply in</div>
+        <div className="text-gray-400">
+          <a href={link} target="_blank">Apply in</a>
+        </div>
 
         <div className="flex w-32 justify-between">
           <img

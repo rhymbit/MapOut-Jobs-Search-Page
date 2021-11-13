@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Form from './Form';
 import JobCard from '../Cards/JobCard';
+import jobsSampleData from './jobsSampleData'
 
 import { Country } from 'country-state-city';
 
@@ -8,6 +9,11 @@ import { Country } from 'country-state-city';
 export default function FindJobs() {
 
   const [jobsData, setJobsData] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setJobsData(jobsData => [...jobsData, ...jobsSampleData.jobs]);
+    }, 3000)}, [])
 
   return(
     <div className='grid grid-rows-12'>
@@ -62,7 +68,8 @@ function _displayJobs(jobsData) {
   return (
     <div className='flex flex-wrap justify-center jobs-list'>
       { jobsData.map((job, index) => {
-        return (
+        
+        return ( job && 
           <div key={index} className="mx-3 jobs-list">
             <JobCard job={job}/>
           </div>

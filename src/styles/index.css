@@ -35,10 +35,10 @@ code {
 }
 
 .card {
-  @apply py-4 px-6 bg-white shadow-lg rounded-3xl my-20;
+  @apply py-4 px-6 bg-white shadow-lg rounded-3xl my-10 border-2 transition duration-200 ease-in-out transform hover:scale-110;
   scroll-behavior: smooth;
   max-width: 350px;
-  max-height: 500px;
+  max-height: 550px;
 }
 
 .card-summary::-webkit-scrollbar{
@@ -92,5 +92,6 @@ code {
 }
 
 .search-button {
-  @apply p-2 w-32 transition duration-200 ease-in-out transform hover:scale-110 bg-opacity-70 rounded-full font-bold text-white;
+  @apply flex flex-col justify-center items-center p-1 md:w-32 lg:w-40 lg:h-10 text-2xl text-white
+      transition duration-200 ease-in-out transform hover:scale-110 bg-opacity-70 rounded-full font-bold;
 }

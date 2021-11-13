@@ -56,7 +56,6 @@ export default function Form(props) {
     <div className='flex flex-wrap justify-evenly mt-20 text-gray-600'>
 
       <div className='w-full flex justify-center mb-8'>
-
         {
           jobType.length > 0 ?
             <div className='mx-10 flex flex-col justify-center p-2 border-2  border-yellow-700 rounded-full border-opacity-50'>
@@ -69,11 +68,15 @@ export default function Form(props) {
         <div>
           {_jobTypeInput(setJobType)}
         </div>
+
+      </div>
+      
+      <div className='flex flex-wrap justify-center space-x-5 space-y-3'>
+        { _jobTypeSelect(setJobType)}
+        { _jobLocationSelect(setJobLocation)}
+        {_submitButton(onFormSubmit, onGoingRequest)}
       </div>
 
-      { _jobTypeSelect(setJobType)}
-      { _jobLocationSelect(setJobLocation)}
-      {_submitButton(onFormSubmit, onGoingRequest)}
     </div>
   );
 }
@@ -150,9 +153,9 @@ function _submitButton(onFormSubmit, onGoingRequest) {
     >
       {
         onGoingRequest ? 
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             {_toggleSubmitButtonColor(onGoingRequest)}
-            <Spinner style="border-4 border-white-200 h-8 w-8"/> Cancel
+            <Spinner style="border-4 border-white-200 h-6 w-6 mr-2"/> Cancel
           </div>
         :
           <div>
