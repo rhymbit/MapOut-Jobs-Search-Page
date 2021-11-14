@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import Form from './Form';
+import React, { useState } from 'react';
 import JobCard from '../Cards/JobCard';
-import jobsSampleData from './jobsSampleData'
-
-import { Country } from 'country-state-city';
 import Spinner from '../Spinner/Spinner';
+import Form from './Form';
+
+
+const JobsContext = React.createContext('jobsContext');
 
 
 export default function FindJobs() {
@@ -12,50 +12,61 @@ export default function FindJobs() {
   const [jobsData, setJobsData] = useState([]);
   const [onGoingRequest, setOnGoingRequest] = useState(false);
 
+  const provider = {
+    jobsData,
+    setJobsData,
+    onGoingRequest,
+    setOnGoingRequest,
+  }
+
   // useEffect(() => {
   //   setTimeout(() => {
   //     setJobsData(jobsData => [...jobsData, ...jobsSampleData.jobs]);
   //   }, 3000)}, [])
 
   return(
-    <div className='grid grid-rows-12 h-full'>
+    <JobsContext.Provider value={provider}>
+      <div className='grid grid-rows-12 h-full'>
 
-      <div className="row-start-2">
-        { _headline() }
-      </div>
-
-      <div className="row-start-4">
-        <Form setJobsData={setJobsData} onGoingRequest={onGoingRequest} setOnGoingRequest={setOnGoingRequest}/>
-      </div>
-
-      <div className="row-start-7">
-
-        <div className='flex justify-center mt-14'>
-          <div className='text-2xl text-gray-700'>
-            {
-              jobsData.length > 0 ?
-                `Total Jobs: ${jobsData.length}`
-              :
-                null
-            }
-          </div>
+        <div className="row-start-2">
+          { _headline() }
         </div>
 
-        <div className="row-start-10 animate-jobs-list mb-10">
-          {
-            onGoingRequest ?
-            <div className='flex justify-center items-center'>
-              <Spinner style="border-4 h-36 w-36" />
+        <div className="row-start-4">
+          <Form />
+        </div>
+
+        <div className="row-start-7">
+
+          <div className='flex justify-center mt-14'>
+            <div className='text-2xl text-gray-700'>
+              {
+                jobsData.length && !onGoingRequest > 0 ?
+                  `Total Jobs: ${jobsData.length}`
+                :
+                  null
+              }
             </div>
-            :
-              null
-          }
-        {_displayJobs(jobsData)}
+          </div>
+
+          <div className="row-start-10 animate-fade-in mb-10">
+            {
+              onGoingRequest ?
+              <div className='flex justify-center items-center'>
+                <Spinner style="border-4 h-36 w-36" />
+              </div>
+              :
+                <>
+                  {_displayJobs(jobsData)}
+                </>
+            }
+          
+          </div>
+
         </div>
 
       </div>
-
-    </div>
+    </JobsContext.Provider>
   )
 }
 
@@ -78,7 +89,7 @@ function _displayJobs(jobsData) {
       { jobsData.map((job, index) => {
         
         return ( job && 
-          <div key={index} className="mx-3 animate-jobs-list">
+          <div key={index} className="mx-3 animate-fade-in">
             <JobCard job={job}/>
           </div>
         )
@@ -86,3 +97,6 @@ function _displayJobs(jobsData) {
     </div>
   )
 }
+
+
+export { JobsContext };

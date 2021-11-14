@@ -99,7 +99,7 @@ code {
   }
 }
 
-.animate-jobs-list {
+.animate-fade-in {
   animation: fadeIn normal 1s linear;
 }
 
@@ -113,11 +113,15 @@ code {
 }
 
 .search-button {
-  @apply flex flex-col justify-center items-center p-1 md:w-32 lg:w-40 lg:h-10 text-2xl text-white
+  @apply flex flex-col justify-center items-center p-1 md:w-32 lg:w-36 lg:h-10 text-2xl text-white
       transition duration-200 ease-in-out transform hover:scale-110 bg-opacity-70 rounded-full font-bold;
 }
 
 @media only screen and (max-width: 768px) {
+
+  #jobLocation {
+    width: 300px;
+  }
   
   .search-button {
     @apply p-1 w-80;
@@ -143,5 +147,9 @@ code {
 
   .search-button {
     @apply w-28;
+  }
+
+  #jobLocation {
+    width: 230px;
   }
 }

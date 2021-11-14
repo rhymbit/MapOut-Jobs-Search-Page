@@ -1,14 +1,15 @@
 import React from 'react';
-
-import userIcon from '../../icons/users.png';
-import mapPinIcon from '../../icons/map-pin.png';
-import briefcaseIcon from '../../icons/briefcase.png';
-import dollarSignIcon from '../../icons/dollar-sign.png';
-import clockIcon from '../../icons/clock.png';
 import arrowIcon from '../../icons/arrow.png';
+import briefcaseIcon from '../../icons/briefcase.png';
+import clockIcon from '../../icons/clock.png';
+import dollarSignIcon from '../../icons/dollar-sign.png';
+import freelancerIcon from '../../icons/freelancer.png';
 import indeedIcon from '../../icons/indeed.png';
 import linkedinIcon from '../../icons/linkedin.png';
-import freelancerIcon from '../../icons/freelancer.png';
+import mapPinIcon from '../../icons/map-pin.png';
+import userIcon from '../../icons/users.png';
+
+
 
 export default function JobCard(props) {
 

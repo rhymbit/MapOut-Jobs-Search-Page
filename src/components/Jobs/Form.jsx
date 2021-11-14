@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import fetchJobs from "../../api/jobsAPI";
 import Spinner from "../Spinner/Spinner";
+import { JobsContext } from "./FindJobs";
 import jobLocations from "./jobLocations";
 import jobTypes from "./jobTypes";
 
@@ -10,34 +11,33 @@ export default function Form(props) {
   const [jobType, setJobType] = useState("");
   const [jobLocation, setJobLocation] = useState("");
 
+  // state to save fetch controller to cancel ongoing fetch requests
   const [fetchController, setFetchController] = useState(null);
 
-  const [noJobsMessage, setNoJobsMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("No jobs available for the given input");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const serverErrorMessage = `Error at server, please try again later`;
 
   const {
     setJobsData,
     onGoingRequest,
     setOnGoingRequest,
-  } = {...props}
+  } = useContext(JobsContext);
 
 
   const onFormSubmit = (e) => {
+    // fetch request controller to abort ongoing fetch requests
     let controller = new AbortController();
     setFetchController(controller);
-    setNoJobsMessage(false);
+    setErrorMessage(null);
     
     if (jobType !== "" && jobLocation !== "") {
-
       if (!onGoingRequest) {
-      
         setOnGoingRequest(true);
-
         try {
           fetchJobs(jobType, jobLocation, controller.signal)
             .then(res => {
               if (res.jobs.length === 0) {
-                setNoJobsMessage(true);
+                setErrorMessage("No jobs available for the given input");
               } else {
                 setJobsData(res.jobs);
               }
@@ -47,24 +47,24 @@ export default function Form(props) {
                 console.log('Request aborted');
               } else {
                 console.log(err);
-                setErrorMessage('Error at server, please try again');
-                setNoJobsMessage(true);
+                setErrorMessage(serverErrorMessage);
+                setJobsData([]);
+                
               }
             })
             .finally (() => {
               setOnGoingRequest(false);
             })
         } catch (error) {
-            setErrorMessage('Error at server, please try again');
+            setErrorMessage(serverErrorMessage);
+            setJobsData([]);
             setOnGoingRequest(false);
-            setNoJobsMessage(true);
         }
       } else {
         fetchController.abort();
         setOnGoingRequest(false);
       }
     } else {
-      setNoJobsMessage(true);
       setErrorMessage("Please select a Location and select or type a Job");
     }
   }
@@ -95,7 +95,7 @@ export default function Form(props) {
       </div>
       
       {
-        noJobsMessage ?
+        errorMessage ?
           <div className='flex flex-wrap w-full justify-center mt-20 text-red-500 text-xl transition duration-400 ease-in animate-bounce'>
             {errorMessage}
           </div>
@@ -109,6 +109,7 @@ export default function Form(props) {
   );
 }
 
+// Input box for entering job manually
 function _jobTypeInput(setJobType, onGoingRequest) {
   const onChange = (e) => {
     setJobType(e.target.value);
@@ -123,12 +124,12 @@ function _jobTypeInput(setJobType, onGoingRequest) {
   )
 }
 
-
+// Dropdown to select job
 function _jobTypeSelect(setJobType) {
   return(
     <select 
       id="jobType" 
-      name="jobType" 
+      name="jobType"
       onChange={e => setJobType(e.target.value)}
       className="select-box"
     >
@@ -146,7 +147,7 @@ function _jobTypeSelect(setJobType) {
   )
 }
 
-
+// Dropdown to select job location
 function _jobLocationSelect(setJobLocation) {
   return (
     <select 
@@ -169,6 +170,8 @@ function _jobLocationSelect(setJobLocation) {
   )
 }
 
+// Search button to search for job. This button turns into a
+// Cancel button when a fetch request is ongoing
 function _submitButton(onFormSubmit, onGoingRequest) {
 
   let buttonStyle;
@@ -204,6 +207,8 @@ function _submitButton(onFormSubmit, onGoingRequest) {
   )
 }
 
+
+// Utility function to disable input fields when a fetch request is ongoing
 function _disableInputs(onGoingRequest) {
 
   let jobInputBox = document.getElementById("jobInputBox");
