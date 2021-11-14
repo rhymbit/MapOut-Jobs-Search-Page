@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import JobCard from '../Cards/JobCard';
 import Spinner from '../Spinner/Spinner';
 import Form from './Form';
@@ -10,6 +10,7 @@ const JobsContext = React.createContext('jobsContext');
 export default function FindJobs() {
 
   const [jobsData, setJobsData] = useState([]);
+  const [jobsCount, setJobsCount] = useState(0);
   const [onGoingRequest, setOnGoingRequest] = useState(false);
 
   const provider = {
@@ -19,10 +20,7 @@ export default function FindJobs() {
     setOnGoingRequest,
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setJobsData(jobsData => [...jobsData, ...jobsSampleData.jobs]);
-  //   }, 3000)}, [])
+  useEffect(() => {}, [])
 
   return(
     <JobsContext.Provider value={provider}>
@@ -42,7 +40,7 @@ export default function FindJobs() {
             <div className='text-2xl text-gray-700'>
               {
                 jobsData.length && !onGoingRequest > 0 ?
-                  `Total Jobs: ${jobsData.length}`
+                  `Total Jobs: ${jobsCount}`
                 :
                   null
               }
@@ -57,7 +55,7 @@ export default function FindJobs() {
               </div>
               :
                 <>
-                  {_displayJobs(jobsData)}
+                  {_displayJobs(jobsData, jobsCount, setJobsCount)}
                 </>
             }
           
@@ -82,20 +80,30 @@ function _headline() {
   )
 }
 
-function _displayJobs(jobsData) {
+function _displayJobs(jobsData, jobsCount, setJobsCount) {
 
-  return (
+  let _jobsCount = 0;
+
+  const jobsDisplayComponent =
     <div className='flex flex-wrap justify-center'>
-      { jobsData.map((job, index) => {
-        
-        return ( job && 
-          <div key={index} className="mx-3 animate-fade-in">
-            <JobCard job={job}/>
-          </div>
-        )
-      })}
+      { 
+        jobsData.map((job, index) => {
+          if (job) {
+            _jobsCount++;
+            return (
+              <div key={index} className="mx-3 animate-fade-in">
+                <JobCard job={job}/>
+              </div>
+            )}
+        })
+      }
     </div>
-  )
+  
+  // Update the jobs count only when it's different from the old count
+  // to prevent infinite re-rendering
+  _jobsCount != jobsCount ? setJobsCount(_jobsCount) : null;
+  
+  return jobsDisplayComponent;
 }
 
 
