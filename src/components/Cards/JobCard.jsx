@@ -66,6 +66,12 @@ function _title(title) {
 }
 
 function _employeeIndustry(employeeCount, industry) {
+
+  if (industry.includes('/')) {
+    let industries = industry.split('/');
+    industry = industries.join('/ ');
+  }
+
   return (
     <div className='grid grid-cols-4 my-4 justify-between'>
       <div className='flex col-start-1 text-center'>
@@ -82,13 +88,8 @@ function _employeeIndustry(employeeCount, industry) {
             `Employee count unknown`
         }
       </div>
-      <div className='flex justify-center text-center p-1 col-start-3 border-2 border-yellow-400 w-40 h-14 rounded-3xl'>
-        {
-          industry && industry.startsWith('Banking') ?
-            `Banking / Account/ Finance`
-          :
-            industry
-        }
+      <div className='flex justify-center items-center text-center p-1 col-start-3 border-2 border-yellow-400 w-40 h-18 rounded-3xl'>
+        {industry}
       </div>
     </div>
   )
